@@ -1,0 +1,34 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: courier-delivery
+  datasource:
+    url: jdbc:postgresql://localhost:5432/courierdb
+    username: courier_app
+    password: courier_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+  sql:
+    init:
+      mode: never
+
+server:
+  error:
+    include-message: always
+    include-stacktrace: never
+
+app:
+  jwt:
+    secret: "CourierDeliveryJwtSecretKey64b!"
+    access-ttl-seconds: 900
+    refresh-ttl-seconds: 604800

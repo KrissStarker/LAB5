@@ -1,0 +1,74 @@
+### ========== 1. LOGIN → access + refresh ==========
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin123!",
+  "deviceId": "postman-1"
+}
+
+### ========== 2. Защищённый endpoint с Bearer access ==========
+GET http://localhost:8080/api/auth/me
+Authorization: Bearer {{accessToken}}
+
+### ========== 3. REFRESH — новая пара ==========
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### ========== 4. Повтор старого refresh → 401, сессия REVOKED ==========
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{oldRefreshToken}}"
+}
+
+### ========== REGISTER → 201 + пара ==========
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Новый Отправитель",
+  "email": "newbie@example.com",
+  "password": "Password1!"
+}
+
+### ========== REGISTER дубликат → 409 ==========
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Дубль",
+  "email": "admin@example.com",
+  "password": "Password1!"
+}
+
+### ========== LOGIN неверный пароль → 401 ==========
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "wrong"
+}
+
+### ========== SENDER login + список посылок ==========
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "sender@example.com",
+  "password": "Sender123"
+}
+
+###
+GET http://localhost:8080/api/shipments
+Authorization: Bearer {{accessToken}}
+
+### ========== CSRF (если нужен для старых POST без JWT-ignore) ==========
+GET http://localhost:8080/api/auth/csrf
